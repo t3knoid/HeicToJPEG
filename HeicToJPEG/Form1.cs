@@ -48,7 +48,7 @@ namespace HeicToJPEG
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            throw new Exception(NotImplementedException);
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeicToJPEG", "HeicToJPEG\HeicToJPEG.csproj", "{FACC9112-704E-45F7-A675-38A050DF84AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageConverter", "ImageConverter\ImageConverter.csproj", "{7DC6D7C6-FE59-46F7-A191-C4F854D645E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageConverters", "ImageConverter\ImageConverters.csproj", "{7DC6D7C6-FE59-46F7-A191-C4F854D645E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

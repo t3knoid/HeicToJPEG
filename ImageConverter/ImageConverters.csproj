@@ -7,8 +7,8 @@
     <ProjectGuid>{7DC6D7C6-FE59-46F7-A191-C4F854D645E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ImageConverter</RootNamespace>
-    <AssemblyName>ImageConverter</AssemblyName>
+    <RootNamespace>ImageConverters</RootNamespace>
+    <AssemblyName>ImageConverters</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,8 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Converter.cs" />
+    <Compile Include="JPEGImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

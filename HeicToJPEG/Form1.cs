@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ImageConverters;
 
 namespace HeicToJPEG
 {
@@ -33,7 +34,16 @@ namespace HeicToJPEG
 
         private void btConvert_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                JPEGImage image = new JPEGImage(tbImageToConvert.Text);
+                image.ToFile();
+                MessageBox.Show("Conversion successful", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed converting", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -49,6 +59,27 @@ namespace HeicToJPEG
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void tbImageToConvert_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files != null && files.Length != 0)
+            {
+                tbImageToConvert.Text = files[0];
+            }
+        }
+
+        private void tbImageToConvert_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
         }
     }
 }

@@ -82,5 +82,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageConverter\ImageConverters.csproj">
+      <Project>{7dc6d7c6-fe59-46f7-a191-c4f854d645e6}</Project>
+      <Name>ImageConverters</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

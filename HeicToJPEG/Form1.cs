@@ -16,5 +16,39 @@ namespace HeicToJPEG
         {
             InitializeComponent();
         }
+
+        private void btBrowse_Click(object sender, EventArgs e)
+        {
+            setImageToConvert();
+        }
+
+        private void setImageToConvert()
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                this.tbImageToConvert.Text = openFileDialog1.FileName;
+            }
+        }
+
+        private void btConvert_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setImageToConvert();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new Exception(NotImplementedException);
+        }
     }
 }

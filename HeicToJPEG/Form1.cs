@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,6 +81,32 @@ namespace HeicToJPEG
             {
                 e.Effect = DragDropEffects.None;
             }
+        }
+
+        private void tbImageToConvert_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.btConvert.Enabled = false;
+        }
+
+        private void tbImageToConvert_TextChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(tbImageToConvert.Text) && File.Exists(tbImageToConvert.Text))
+            {
+                this.btConvert.Enabled = true;
+            }
+            else
+            {
+                this.btConvert.Enabled = false;
+            }
+
         }
     }
 }

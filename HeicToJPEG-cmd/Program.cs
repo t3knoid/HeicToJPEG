@@ -56,6 +56,10 @@ namespace HeicToJPEG_cmd
                 }
 
             }
+            else
+            {
+                usage();
+            }
         }
         static void usage()
         {

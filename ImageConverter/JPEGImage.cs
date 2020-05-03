@@ -52,11 +52,14 @@ namespace ImageConverters
                 using (var fs = new FileStream(file, FileMode.Create, FileAccess.Write))
                 {
                     fs.Write(Bytes, 0, Bytes.Length);
-                    return true;
+                    
                 }
+                ConvertedFilePath = file;
+                return true;
             }
             catch (Exception ex)
             {
+                ConvertedFilePath = String.Empty;
                 throw ex;
             }
         }

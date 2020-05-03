@@ -1,4 +1,4 @@
-﻿namespace HeicToJPEG
+﻿namespace HeicToJPEG_service
 {
     partial class Form1
     {

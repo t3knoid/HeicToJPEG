@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HeicToJPEG.Properties
+namespace HeicToJPEG_service.Properties
 {
 
 

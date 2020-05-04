@@ -108,5 +108,10 @@ namespace HeicToJPEG_service
             }
 
         }
+
+        private void btCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -29,3 +29,8 @@ This project provides a Win32 command-line interface that allows conversion of a
 ```batch
 usage: HeicToJPEG-cmd -file pathToHEIC
 ```
+
+# Releases
+Builds are created using [AppVeyor](https://ci.appveyor.com/project/t3knoid/heictojpeg). 
+
+Download the [latest build](https://github.com/t3knoid/HeicToJPEG/releases/latest/).

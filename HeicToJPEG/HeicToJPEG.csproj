@@ -83,6 +83,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HeicToJPEG-cmd\HeicToJPEG-cmd.csproj">
+      <Project>{bcaa0a73-61d5-4b8e-b749-b27d54fc7985}</Project>
+      <Name>HeicToJPEG-cmd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HeicToJPEG-service\HeicToJPEG-service.csproj">
+      <Project>{a62f68ad-25a3-4c72-8681-ce434d6ace02}</Project>
+      <Name>HeicToJPEG-service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageConverter\ImageConverters.csproj">
       <Project>{7dc6d7c6-fe59-46f7-a191-c4f854d645e6}</Project>
       <Name>ImageConverters</Name>

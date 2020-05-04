@@ -1,4 +1,4 @@
-﻿# define name of installer
+# define name of installer
 !include "MUI2.nsh"
 
 # define version information

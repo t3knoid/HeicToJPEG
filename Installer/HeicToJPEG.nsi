@@ -126,9 +126,15 @@ Function fnc_CI_Run
 	ExecShell "" "$SMPROGRAMS\$(^Name)\$(^Name).lnk"	
 FunctionEnd
 
+!ifndef LVM_GETITEMCOUNT
 !define LVM_GETITEMCOUNT 0x1004
+!endif
+!ifndef LVM_GETITEMTEXTA
 !define LVM_GETITEMTEXTA 0x102D
+!endif
+!ifndef LVM_GETITEMTEXTW
 !define LVM_GETITEMTEXTW 0x1073
+!endif
 !if "${NSIS_CHAR_SIZE}" > 1
 !define LVM_GETITEMTEXT ${LVM_GETITEMTEXTW}
 !else

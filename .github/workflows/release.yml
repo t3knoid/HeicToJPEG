@@ -103,7 +103,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        artifacts: "release-artifacts/**"
+        artifacts: "release-artifacts/HeicToJPEG.exe,release-artifacts/HeicToJPEG-cmd.exe,release-artifacts/HeicToJPEG_*.exe"
         draft: false
         prerelease: false
         body: |

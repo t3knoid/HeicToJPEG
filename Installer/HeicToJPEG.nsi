@@ -129,16 +129,21 @@ FunctionEnd
 !ifndef LVM_GETITEMCOUNT
 !define LVM_GETITEMCOUNT 0x1004
 !endif
+
 !ifndef LVM_GETITEMTEXTA
 !define LVM_GETITEMTEXTA 0x102D
 !endif
+
 !ifndef LVM_GETITEMTEXTW
 !define LVM_GETITEMTEXTW 0x1073
 !endif
+
+!ifndef LVM_GETITEMTEXT
 !if "${NSIS_CHAR_SIZE}" > 1
 !define LVM_GETITEMTEXT ${LVM_GETITEMTEXTW}
 !else
 !define LVM_GETITEMTEXT ${LVM_GETITEMTEXTA}
+!endif
 !endif
  
 ; Insert function as an installer and uninstaller function.

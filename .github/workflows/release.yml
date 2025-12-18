@@ -73,7 +73,8 @@ jobs:
         name: release-build
     
     - name: Setup NSIS
-      uses: joncloud/makensis-action@v3.6
+      run: |
+        choco install nsis -y
     
     - name: Create installer
       run: |

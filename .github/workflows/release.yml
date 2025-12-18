@@ -30,6 +30,8 @@ jobs:
   build:
     needs: validate
     runs-on: windows-latest
+    outputs:
+      full-version: ${{ steps.version.outputs.full-version }}
     
     steps:
     - uses: actions/checkout@v3
@@ -37,6 +39,7 @@ jobs:
         fetch-depth: 0
     
     - name: Update version information
+      id: version
       shell: pwsh
       run: ".\\scripts\\UpdateVersion.ps1"
     
@@ -53,7 +56,6 @@ jobs:
       run: msbuild HeicToJPEG.sln /p:Configuration=Release /p:Platform="Any CPU"
       
     - name: Upload build artifacts
-      id: upload
       uses: actions/upload-artifact@v4
       with:
         name: release-build
@@ -67,6 +69,7 @@ jobs:
     runs-on: windows-latest
     env:
       VERSION: ${{ needs.validate.outputs.version }}
+      FULL_VERSION: ${{ needs.build.outputs.full-version }}
     
     steps:
     - uses: actions/checkout@v3
@@ -83,9 +86,10 @@ jobs:
         choco install nsis -y
     
     - name: Create installer
+      shell: pwsh
       run: |
         cd Installer
-        & "C:\\Program Files (x86)\\NSIS\\makensis.exe" /DVERSION="${{ env.VERSION }}" HeicToJPEG.nsi
+        & "C:\\Program Files (x86)\\NSIS\\makensis.exe" /DVERSION="${{ env.FULL_VERSION }}" HeicToJPEG.nsi
       
     - name: Prepare release artifacts
       run: |

@@ -79,7 +79,7 @@ jobs:
     - name: Create installer
       run: |
         cd Installer
-        "C:\\ProgramData\\chocolatey\\lib\\nsis\\makensis.exe" /DVERSION="${{ env.VERSION }}" HeicToJPEG.nsi
+        & "C:\\ProgramData\\chocolatey\\lib\\nsis\\makensis.exe" /DVERSION="${{ env.VERSION }}" HeicToJPEG.nsi
       
     - name: Prepare release artifacts
       run: |

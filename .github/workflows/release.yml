@@ -6,13 +6,33 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  validate:
     runs-on: windows-latest
     outputs:
-      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      version: ${{ steps.validate.outputs.version }}
     
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Validate release tag matches VERSION file
+      id: validate
+      shell: pwsh
+      run: & ".\scripts\ValidateReleaseTag.ps1"
+
+  build:
+    needs: validate
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Update version information
+      shell: pwsh
+      run: & ".\scripts\UpdateVersion.ps1"
     
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
@@ -28,7 +48,7 @@ jobs:
       
     - name: Upload build artifacts
       id: upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-build
         path: |
@@ -37,22 +57,18 @@ jobs:
           ImageConverter/bin/Release/
 
   release:
-    needs: build
+    needs: [validate, build]
     runs-on: windows-latest
+    env:
+      VERSION: ${{ needs.validate.outputs.version }}
     
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     
-    - name: Get version from tag
-      id: tag_version
-      run: |
-        $tag = "${{ github.ref }}".Replace('refs/tags/v', '')
-        echo "version=$tag" >> $env:GITHUB_OUTPUT
-    
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: release-build
     
@@ -62,14 +78,14 @@ jobs:
     - name: Create installer
       run: |
         cd Installer
-        makensis.exe HeicToJPEG.nsi
+        makensis.exe /DVERSION="${{ env.VERSION }}" HeicToJPEG.nsi
       
     - name: Prepare release artifacts
       run: |
         mkdir release-artifacts
-        Copy-Item "HeicToJPEG/bin/Release/HeicToJPEG.exe" -Destination "release-artifacts" -Force
-        Copy-Item "HeicToJPEG-cmd/bin/Release/HeicToJPEG-cmd.exe" -Destination "release-artifacts" -Force
-        Copy-Item "Installer/HeicToJPEG_setup.exe" -Destination "release-artifacts" -Force
+        Copy-Item "HeicToJPEG\bin\Release\HeicToJPEG.exe" -Destination "release-artifacts" -Force
+        Copy-Item "HeicToJPEG-cmd\bin\Release\HeicToJPEG-cmd.exe" -Destination "release-artifacts" -Force
+        Copy-Item "Installer\HeicToJPEG_*.exe" -Destination "release-artifacts" -Force
       
     - name: Create Release
       uses: ncipollo/release-action@v1
@@ -80,10 +96,10 @@ jobs:
         draft: false
         prerelease: false
         body: |
-          Release ${{ steps.tag_version.outputs.version }}
+          Release ${{ env.VERSION }}
           
           ## Download
-          - **HeicToJPEG_setup.exe** - Complete Windows installer
+          - **HeicToJPEG_${{ env.VERSION }}_setup.exe** - Complete Windows installer
           - **HeicToJPEG.exe** - GUI Application
           - **HeicToJPEG-cmd.exe** - Command-line tool
           

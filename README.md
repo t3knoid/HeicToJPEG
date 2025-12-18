@@ -80,25 +80,127 @@ A Windows service implementation for unattended/background conversion:
 
 ## Build and Deployment
 
-### Build System
-- **Solution File**: `HeicToJPEG.sln`
-- **CI/CD**: Automated builds via [AppVeyor](https://ci.appveyor.com/project/t3knoid/heictojpeg)
-- **Build Configuration**: Visual Studio 2017, Any CPU, Release mode
+### GitHub Actions Workflows
+
+This project uses GitHub Actions for automated build and release:
+
+#### Build Workflow (`build.yml`)
+
+- **Trigger**: Pushes to `main`, `master`, or `develop` branches; pull requests
+- **Actions**:
+  - Restores NuGet dependencies
+  - Builds solution in Release configuration
+  - Uploads build artifacts (DLLs and EXEs)
+
+#### Release Workflow (`release.yml`)
+
+- **Trigger**: Git tag push (format: `v*`, e.g., `v1.0.0`)
+- **Actions**:
+  - Updates all AssemblyInfo.cs files with version from git tag
+  - Builds the solution
+  - Creates NSIS Windows installer with version in filename
+  - Publishes release to GitHub with all artifacts
+  - Artifacts include: GUI app, CLI tool, and Windows installer
+
+### Versioning Strategy
+
+The project uses a **VERSION file** as the single source of truth:
+
+1. **VERSION File** (`VERSION` in root): Contains base version (e.g., `1.0.0`)
+2. **Build Number**: Scripts append commit count (e.g., `1.0.0.{commit-count}`)
+3. **Release Tags**: Must match VERSION file (e.g., `v1.0.0`)
+4. **Validation**: Release workflow validates tag matches VERSION file content
+
+**Version Flow:**
+
+```
+Development builds (branch push):
+  - Read VERSION file (e.g., 1.0.0)
+  - Append commit count (e.g., 1.0.0.42)
+  - Update AssemblyInfo.cs files
+  - Build with dev version
+
+Release builds (tag push v1.0.0):
+  - ValidateReleaseTag checks: v1.0.0 == VERSION file content
+  - If mismatch: Release fails with error
+  - If match: Continue with build and create release
+```
+
+**UpdateVersion.ps1 Script** (`scripts/UpdateVersion.ps1`):
+- Reads VERSION file
+- Calculates build number from commit count
+- Updates all AssemblyInfo.cs files
+- Supports dry-run mode (`-DryRun` flag)
+
+**ValidateReleaseTag.ps1 Script** (`scripts/ValidateReleaseTag.ps1`):
+- Extracts version from git tag (removes `v` prefix)
+- Compares with VERSION file
+- Fails release if versions don't match
+- Prevents accidental mismatched releases
+
+### Creating a Release
+
+To create a new release, follow these steps:
+
+1. **Update VERSION file** in the project root with the new version:
+   ```
+   1.2.0
+   ```
+
+2. **Commit the version change:**
+   ```powershell
+   git add VERSION
+   git commit -m "Bump version to 1.2.0"
+   git push origin main
+   ```
+
+3. **When ready to package a stable build, create and push a matching version tag:**
+   ```powershell
+   git tag v1.2.0
+   git push origin v1.2.0
+   ```
+   
+   ⚠️ **Important:** Only create a tag when you're ready to release a stable build. Tags trigger the full release workflow and will be publicly available.
+
+4. **GitHub Actions automatically:**
+   - Validates that tag (`v1.2.0`) matches VERSION file (`1.2.0`)
+   - Fails if versions don't match (preventing mistakes)
+   - Builds the code with version 1.2.0
+   - Creates installer: `HeicToJPEG_1.2.0_setup.exe`
+   - Publishes GitHub Release with all artifacts
+
+**Important:** The tag must match the VERSION file exactly (minus the `v` prefix). If they don't match, the release workflow will fail with a validation error.
+
+**Example workflow:**
+```
+1. VERSION file: 1.2.0
+2. Tag created: v1.2.0        ✓ Match → Release succeeds
+   
+   OR
+
+1. VERSION file: 1.2.0
+2. Tag created: v1.3.0        ✗ Mismatch → Release fails with validation error
+```
 
 ### Installation
+
 - **Installer Type**: NSIS (Nullsoft Scriptable Install System)
 - **Output**: `HeicToJPEG_setup.exe`
 - **Deployment**: GitHub Releases integration for automated deployment
 
 ### Dependencies
+
 - **Magick.NET**: Image conversion library (NuGet)
 - **ImageMagick**: Underlying image processing engine
+### Downloading Releases
 
-## Releases
+Download the [latest release](https://github.com/t3knoid/HeicToJPEG/releases/latest/) from GitHub.
 
-Builds are automatically created using [AppVeyor](https://ci.appveyor.com/project/t3knoid/heictojpeg) and deployed to GitHub releases.
+Available artifacts:
 
-Download the [latest build](https://github.com/t3knoid/HeicToJPEG/releases/latest/).
+- **HeicToJPEG_setup.exe** - Complete Windows installer (recommended)
+- **HeicToJPEG.exe** - GUI application executable
+- **HeicToJPEG-cmd.exe** - Command-line tool executable
 
 ## Use Cases
 
@@ -109,7 +211,7 @@ Download the [latest build](https://github.com/t3knoid/HeicToJPEG/releases/lates
 
 ## Project Structure
 
-```
+```bash
 HeicToJPEG/
 ├── ImageConverter/          # Core conversion library
 ├── HeicToJPEG/             # Windows Forms GUI

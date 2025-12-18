@@ -9,9 +9,19 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      full-version: ${{ steps.version.outputs.full-version }}
     
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Update version information
+      id: version
+      shell: pwsh
+      run: & ".\scripts\UpdateVersion.ps1"
     
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1

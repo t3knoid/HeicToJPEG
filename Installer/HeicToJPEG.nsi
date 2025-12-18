@@ -1,9 +1,11 @@
 # define name of installer
 !include "MUI2.nsh"
 
-# define version information
-!define PRODUCT_VERSION "1.0.0.0"
-!define VERSION "1.0.0.0"
+# define version information - can be overridden by build process via /DVERSION
+!ifndef VERSION
+  !define VERSION "1.0.0.0"
+!endif
+!define PRODUCT_VERSION "${VERSION}"
 !define PRODUCT_NAME "HeicToJPEG"
 !define COMPANY "Frank Refol" 
 !define DESCRIPTION "Converts a Heic image into JPEG"
@@ -12,7 +14,7 @@
 !define MAIN_EXECUTABLE_CONFIG "HeicToJPEG.exe.config"
 !define RELEASE_DIR "..\HeicToJPEG\bin\Release\"
 
-OutFile "HeicToJPEG_setup.exe"
+OutFile "HeicToJPEG_${VERSION}_setup.exe"
 
 Name "${PRODUCT_NAME}"
 Caption "${PRODUCT_NAME}"

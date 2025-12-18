@@ -25,6 +25,10 @@ if ($tagVersion -ne $fileVersion) {
 }
 
 Write-Host "✓ Version validation passed!"
-Write-Host "##[set-output name=version;]$fileVersion"
+Write-Host "Version: $fileVersion"
+
+if ($env:GITHUB_OUTPUT) {
+    Add-Content -Path $env:GITHUB_OUTPUT -Value "version=$fileVersion"
+}
 
 exit 0

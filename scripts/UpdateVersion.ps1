@@ -55,8 +55,14 @@ foreach ($file in $assemblyInfoFiles) {
 }
 
 # Output version for use in GitHub Actions
-Write-Host "##[set-output name=version;]$baseVersion"
-Write-Host "##[set-output name=full-version;]$fullVersion"
-Write-Host "##[set-output name=assembly-version;]$assemblyVersion"
+Write-Host "Base version: $baseVersion"
+Write-Host "Full version: $fullVersion"
+Write-Host "Assembly version: $assemblyVersion"
+
+if ($env:GITHUB_OUTPUT) {
+    Add-Content -Path $env:GITHUB_OUTPUT -Value "version=$baseVersion"
+    Add-Content -Path $env:GITHUB_OUTPUT -Value "full-version=$fullVersion"
+    Add-Content -Path $env:GITHUB_OUTPUT -Value "assembly-version=$assemblyVersion"
+}
 
 exit 0

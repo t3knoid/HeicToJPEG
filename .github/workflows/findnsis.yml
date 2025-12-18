@@ -1,0 +1,26 @@
+name: Find NSIS
+
+on:
+  workflow_dispatch
+
+jobs:
+  find-nsis:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Setup NSIS
+      run: |
+        choco install nsis -y
+    
+    - name: Find makensis
+      shell: pwsh
+      run: |
+        Write-Host "=== Searching for makensis.exe ===" -ForegroundColor Cyan
+        
+        Write-Host "`nSearching in Chocolatey lib..." -ForegroundColor Yellow
+        Get-ChildItem -Path "C:\ProgramData\chocolatey\lib" -Recurse -Filter "makensis.exe" -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName -ForegroundColor Green }
+        
+        Write-Host "`nSearching in Program Files..." -ForegroundColor Yellow
+        Get-ChildItem -Path "C:\Program Files*" -Recurse -Filter "makensis.exe" -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName -ForegroundColor Green }
+        
+        Write-Host "`n=== Search Complete ===" -ForegroundColor Cyan

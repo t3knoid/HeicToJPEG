@@ -192,6 +192,27 @@ To create a new release, follow these steps:
 2. Tag created: v1.3.0        ✗ Mismatch → Release fails with validation error
 ```
 
+### Deleting a Tag
+
+If you accidentally push a tag or need to recreate it due to a failed release, delete it locally and remotely:
+
+```powershell
+git tag -d v1.0.0
+git push origin --delete v1.0.0
+```
+
+**When to use:**
+
+- Tag was pushed but release workflow failed and needs to be re-triggered
+- Tag version doesn't match VERSION file (validation error)
+- Tag was created on wrong commit
+
+**After deletion:**
+
+1. Fix the issue (e.g., update VERSION file)
+2. Create the correct tag: `git tag v1.2.0`
+3. Push the new tag: `git push origin v1.2.0`
+
 ### Installation
 
 - **Installer Type**: NSIS (Nullsoft Scriptable Install System)

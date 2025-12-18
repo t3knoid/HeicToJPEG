@@ -1,6 +1,9 @@
 # define name of installer
 !include "MUI2.nsh"
 
+# Add plugin directory
+!addplugindir "Plugins"
+
 # define version information - can be overridden by build process via /DVERSION
 !ifndef VERSION
   !define VERSION "1.0.0.0"

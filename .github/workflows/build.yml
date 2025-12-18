@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+      
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      
+    - name: Restore NuGet packages
+      run: nuget restore HeicToJPEG.sln
+      
+    - name: Build solution
+      run: msbuild HeicToJPEG.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-output
+        path: |
+          HeicToJPEG/bin/Release/
+          HeicToJPEG-cmd/bin/Release/
+          HeicToJPEG-service/bin/Release/
+          ImageConverter/bin/Release/

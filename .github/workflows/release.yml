@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+      
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      
+    - name: Restore NuGet packages
+      run: nuget restore HeicToJPEG.sln
+      
+    - name: Build solution
+      run: msbuild HeicToJPEG.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
+    - name: Upload build artifacts
+      id: upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-build
+        path: |
+          HeicToJPEG/bin/Release/
+          HeicToJPEG-cmd/bin/Release/
+          ImageConverter/bin/Release/
+
+  release:
+    needs: build
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Get version from tag
+      id: tag_version
+      run: |
+        $tag = "${{ github.ref }}".Replace('refs/tags/v', '')
+        echo "version=$tag" >> $env:GITHUB_OUTPUT
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: release-build
+    
+    - name: Setup NSIS
+      uses: joncloud/makensis-action@v3.6
+    
+    - name: Create installer
+      run: |
+        cd Installer
+        makensis.exe HeicToJPEG.nsi
+      
+    - name: Prepare release artifacts
+      run: |
+        mkdir release-artifacts
+        Copy-Item "HeicToJPEG/bin/Release/HeicToJPEG.exe" -Destination "release-artifacts" -Force
+        Copy-Item "HeicToJPEG-cmd/bin/Release/HeicToJPEG-cmd.exe" -Destination "release-artifacts" -Force
+        Copy-Item "Installer/HeicToJPEG_setup.exe" -Destination "release-artifacts" -Force
+      
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        artifacts: "release-artifacts/**"
+        draft: false
+        prerelease: false
+        body: |
+          Release ${{ steps.tag_version.outputs.version }}
+          
+          ## Download
+          - **HeicToJPEG_setup.exe** - Complete Windows installer
+          - **HeicToJPEG.exe** - GUI Application
+          - **HeicToJPEG-cmd.exe** - Command-line tool
+          
+          ## Changes
+          See commit history for details of changes in this release.

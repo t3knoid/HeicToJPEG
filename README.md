@@ -28,12 +28,14 @@ This class handles the actual conversion logic and provides the following functi
 - **Error Property**: Contains error messages if conversion fails
 
 **Usage Example:**
+
 ```csharp
 JPEGImage myimage = new JPEGImage(filePath);
 myimage.ToFile(); // Converts file and saves as JPEG in same directory
 ```
 
 **Conversion Process:**
+
 1. Reads the HEIC image file
 2. Uses ImageMagick to convert to JPEG format
 3. Writes bytes to output file in the original directory
@@ -60,6 +62,7 @@ A console application for automated or scripted image conversion:
 - **Batch Processing**: Suitable for integration with scripts and batch operations
 
 **Example Usage:**
+
 ```batch
 HeicToJPEG-cmd -file "C:\Images\photo.heic"
 ```
@@ -74,6 +77,7 @@ A Windows service implementation for unattended/background conversion:
 - **Installation**: Includes ProjectInstaller for easy service registration/removal
 
 **Features:**
+
 - Can be installed/started via `sc` command or Services.msc
 - Allows unattended batch conversion
 - Supports automated workflows
@@ -127,12 +131,14 @@ Release builds (tag push v1.0.0):
 ```
 
 **UpdateVersion.ps1 Script** (`scripts/UpdateVersion.ps1`):
+
 - Reads VERSION file
 - Calculates build number from commit count
 - Updates all AssemblyInfo.cs files
 - Supports dry-run mode (`-DryRun` flag)
 
 **ValidateReleaseTag.ps1 Script** (`scripts/ValidateReleaseTag.ps1`):
+
 - Extracts version from git tag (removes `v` prefix)
 - Compares with VERSION file
 - Fails release if versions don't match
@@ -143,11 +149,13 @@ Release builds (tag push v1.0.0):
 To create a new release, follow these steps:
 
 1. **Update VERSION file** in the project root with the new version:
-   ```
+
+   ```bash
    1.2.0
    ```
 
 2. **Commit the version change:**
+
    ```powershell
    git add VERSION
    git commit -m "Bump version to 1.2.0"
@@ -155,11 +163,12 @@ To create a new release, follow these steps:
    ```
 
 3. **When ready to package a stable build, create and push a matching version tag:**
+
    ```powershell
    git tag v1.2.0
    git push origin v1.2.0
    ```
-   
+
    ⚠️ **Important:** Only create a tag when you're ready to release a stable build. Tags trigger the full release workflow and will be publicly available.
 
 4. **GitHub Actions automatically:**
@@ -172,6 +181,7 @@ To create a new release, follow these steps:
 **Important:** The tag must match the VERSION file exactly (minus the `v` prefix). If they don't match, the release workflow will fail with a validation error.
 
 **Example workflow:**
+
 ```
 1. VERSION file: 1.2.0
 2. Tag created: v1.2.0        ✓ Match → Release succeeds
@@ -192,6 +202,7 @@ To create a new release, follow these steps:
 
 - **Magick.NET**: Image conversion library (NuGet)
 - **ImageMagick**: Underlying image processing engine
+
 ### Downloading Releases
 
 Download the [latest release](https://github.com/t3knoid/HeicToJPEG/releases/latest/) from GitHub.

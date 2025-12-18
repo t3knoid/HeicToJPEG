@@ -19,7 +19,7 @@ jobs:
     - name: Validate release tag matches VERSION file
       id: validate
       shell: pwsh
-      run: & ".\scripts\ValidateReleaseTag.ps1"
+      run: ".\\scripts\\ValidateReleaseTag.ps1"
 
   build:
     needs: validate

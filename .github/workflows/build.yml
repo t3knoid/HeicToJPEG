@@ -21,7 +21,7 @@ jobs:
     - name: Update version information
       id: version
       shell: pwsh
-      run: & ".\scripts\UpdateVersion.ps1"
+      run: ".\\scripts\\UpdateVersion.ps1"
     
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
